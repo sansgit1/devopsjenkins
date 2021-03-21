@@ -1,21 +1,20 @@
 ﻿pipeline {
   environment {
-    imagename = "houseofcards11/helloworld"
+    registry = "houseofcards11/helloworld"
     registryCredential = 'docker-hub'
-    dockerImage = ''
+	dockerImage = ''
   }
   agent any
   stages {
     stage('Cloning Git') {
       steps {
         git([url: 'git@github.com:sansgit1/devopsjenkins.git', branch: 'master', credentialsId: 'github-ssh-key'])
-
       }
     }
     stage('Building image') {
       steps{
         script {
-          dockerImage = docker.build imagename
+          dockerImage = docker.build registry + ":$BUILD_NUMBER"
         }
       }
     }
@@ -34,7 +33,7 @@
       steps{
         sh "docker stop devops"
         sh "docker rm devops"
-        sh "docker run -d -p 80:80 --name devops $imagename:$BUILD_NUMBER"
+        sh "docker run -d -p 8000:8080 --name devops $imagename:$BUILD_NUMBER"
         sh "docker rmi $imagename:$BUILD_NUMBER"
 
       }
