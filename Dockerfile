@@ -1,6 +1,5 @@
-FROM httpd:latest
-
-copy ./index.html /usr/local/apache2/htdocs
-
-
-
+﻿FROM centos:latest
+RUN yum update -y
+RUN yum install httpd -y
+copy ./index.html /var/www/html
+ENTRYPOINT ["/usr/sbin/httpd","-D","FOREGROUND"]
