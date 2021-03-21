@@ -8,7 +8,7 @@
   stages {
     stage('Cloning Git') {
       steps {
-        git([url: 'git@github.com:sansgit1/devopsjenkins.git', branch: 'master', credentialsId: 'github-ssh-key'])
+        git([url: 'https://github.com/sansgit1/devopsjenkins.git', branch: 'master'])
       }
     }
     stage('Building image') {
@@ -33,9 +33,9 @@
       steps{
         sh "docker stop devops"
         sh "docker rm devops"
-        sh "docker run -d -p 8000:8080 --name devops $imagename:$BUILD_NUMBER"
-        sh "docker rmi $imagename:$BUILD_NUMBER"
-
+        sh "docker container run -d -p 8000:80 --name devops houseofcards11/helloworld:$BUILD_NUMBER"
+        echo 'Cleaning up'
+       
       }
     }
   }
